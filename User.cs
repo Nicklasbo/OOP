@@ -15,23 +15,16 @@ namespace OOP
 
         public User(string firstname, string lastname, string username, string email)
         {
-            try
-            {
-                this.UserID = ++ID;
-                this.Firstname = Validation.Required(firstname);
-                this.Lastname = Validation.Required(lastname);
-                this.Username = Validation.Username(username);
-                this.Email = Validation.Email(email);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            this.UserID = ++ID;
+            this.Firstname = Validation.Required(firstname);
+            this.Lastname = Validation.Required(lastname);
+            this.Username = Validation.Username(username);
+            this.Email = Validation.Email(email);
         }
 
         public override string ToString()
         {
-            return string.Format("{0} {1} ({2})", this.Firstname, this.Lastname, this.Email);
+            return string.Format("{0} {1} ({2}) kr. {3,5:f2}", this.Firstname, this.Lastname, this.Email, this.Balance);
         }
 
         public override bool Equals(object obj)

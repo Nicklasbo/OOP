@@ -8,46 +8,39 @@ namespace OOP
 {
     class Stregsystem
     {
-        public static List<User> users = new List<User>() {
+        List<User> users = new List<User>() {
             new User("Rasmus", "Nørskov", "rnarsk14", "rnarsk14@student.aau.dk"),
             new User("Thomas", "Bøgholm", "boegholm", "boegholm@cs.aau.dk"),
             new User("Kurt", "Nørmark", "normark", "normark@cs.aau.dk")
         };
 
-        public static List<Product> products = Product.ReadFile();
+        List<Product> products = Product.ReadFile();
 
-        public static List<Transaction> transactions = new List<Transaction>() {
-            new InsertCashTransaction(users[0], 60),
-            new BuyTransaction(users[0], products[0], 60)
-        };
+        List<Transaction> transactions = new List<Transaction>();
 
-        public Stregsystem()
+        public BuyTransaction BuyProduct(User user, Product product)
         {
-            //
+            BuyTransaction transaction = new BuyTransaction(user, product);
+
+            ExecuteTransaction(transaction);
+
+            return transaction;
         }
 
-        public void BuyProduct(User user, Product product)
+        public InsertCashTransaction AddCreditsToAccount(User user, float amount)
         {
-            ExecuteTransaction(new BuyTransaction(user, product, product.Price));
-        }
+            InsertCashTransaction transaction = new InsertCashTransaction(user, amount);
 
-        public void AddCreditsToAccount(User user, float amount)
-        {
-            ExecuteTransaction(new InsertCashTransaction(user, amount));
+            ExecuteTransaction(transaction);
+
+            return transaction;
         }
 
         public void ExecuteTransaction(Transaction transaction)
         {
-            try
-            {
-                transaction.Execute();
+            transaction.Execute();
 
-                transactions.Add(transaction);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            transactions.Add(transaction);
         }
 
         public Product GetProduct(int productID)
@@ -58,10 +51,10 @@ namespace OOP
                     return product;
             }
 
-            return null;
+            throw new ProductNotFoundException();
         }
 
-        public static User GetUser(string username)
+        public User GetUser(string username)
         {
             foreach (User user in users)
             {
@@ -69,7 +62,7 @@ namespace OOP
                     return user;
             }
 
-            return null;
+            throw new UserNotFoundException();
         }
 
         public List<Transaction> GetTransactionList(User user, int amount)

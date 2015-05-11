@@ -14,12 +14,6 @@ namespace OOP
         public int TransactionID;
         public User User;
         public DateTime Date;
-        public float Amount;
-
-        public override string ToString()
-        {
-            return string.Format("{0} | {1} | {2}", this.TransactionID, this.Amount, this.Date);
-        }
 
         public virtual void Execute()
         {

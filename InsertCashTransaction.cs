@@ -8,6 +8,8 @@ namespace OOP
 {
     class InsertCashTransaction : Transaction
     {
+        public float Amount;
+
         public InsertCashTransaction(User user, float amount)
         {
             this.TransactionID = ++ID;

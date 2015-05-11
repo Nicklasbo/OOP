@@ -18,38 +18,24 @@ namespace OOP
 
         public Product(string name, float price, bool active = true, bool canBeBoughtOnCredit = false)
         {
-            try
-            {
-                this.ProductID = ++ID;
-                this.Name = Validation.Required(name);
-                this.Price = price;
-                this.Active = active;
-                this.CanBeBoughtOnCredit = canBeBoughtOnCredit;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            this.ProductID = ++ID;
+            this.Name = Validation.Required(name);
+            this.Price = price;
+            this.Active = active;
+            this.CanBeBoughtOnCredit = canBeBoughtOnCredit;
         }
 
         public Product(string input, char delimeter)
         {
             var data = input.Split(delimeter);
-            
-            try
-            {
-                ID = Convert.ToInt32(data[0]);
 
-                this.ProductID = Convert.ToInt32(data[0]);
-                this.Name = Validation.Required(CleanName(data[1]));
-                this.Price = (Convert.ToSingle(data[2])/100);
-                this.Active = Convert.ToBoolean(Convert.ToInt32(data[3]));
-                this.CanBeBoughtOnCredit = false;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
+            ID = Convert.ToInt32(data[0]);
+
+            this.ProductID = Convert.ToInt32(data[0]);
+            this.Name = Validation.Required(CleanName(data[1]));
+            this.Price = (Convert.ToSingle(data[2]) / 100);
+            this.Active = Convert.ToBoolean(Convert.ToInt32(data[3]));
+            this.CanBeBoughtOnCredit = false;
         }
 
         private string CleanName(string name)
@@ -59,6 +45,16 @@ namespace OOP
             name = name.Trim();
 
             return name;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0}\tkr. {1,5:f2}\t{2}", this.ProductID, this.Price, this.Name);
+        }
+
+        public static string ToHeader()
+        {
+            return "ID\tPrice\t\tName";
         }
 
         public static List<Product> ReadFile()

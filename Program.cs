@@ -11,6 +11,9 @@ namespace OOP
         static void Main(string[] args)
         {
             Stregsystem stregsystem = new Stregsystem();
+            StregsystemCLI cli = new StregsystemCLI(stregsystem);
+            StregsystemCommandParser parser = new StregsystemCommandParser(cli, stregsystem);
+            cli.Start(parser);
         }
     }
 }

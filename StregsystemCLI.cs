@@ -1,0 +1,90 @@
+﻿using System;
+
+namespace OOP
+{
+    class StregsystemCLI
+    {
+        Stregsystem Stregsystem;
+        StregsystemCommandParser Parser;
+
+        public StregsystemCLI(Stregsystem stregsystem)
+        {
+            this.Stregsystem = stregsystem;
+        }
+
+        public void ParseLine()
+        {
+            this.Parser.ParseCommand(Console.ReadLine());
+        }
+
+        public void Start(StregsystemCommandParser parser)
+        {
+            this.Parser = parser;
+
+            foreach (Product product in this.Stregsystem.GetActiveProducts())
+            {
+                Console.WriteLine(product);
+            }
+
+            ParseLine();
+        }
+
+        public void DisplayTransactionList(User user, int amount)
+        {
+            foreach (Transaction transaction in this.Stregsystem.GetTransactionList(user, amount))
+            {
+                Console.WriteLine(transaction);
+            }
+        }
+
+        public void DisplayUserNotFound()
+        {
+            Console.WriteLine("user not found");
+        }
+
+        public void DisplayProductNotFound()
+        {
+            Console.WriteLine("product not found");
+        }
+
+        public void DisplayUserInfo(User user)
+        {
+            Console.WriteLine(user);
+        }
+
+        public void DisplayTooManyArgumentsError()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisplayAdminCommandNotFoundMessage()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisplayUserBuysProduct(BuyTransaction transaction)
+        {
+            Console.WriteLine("{0} bought {1}", transaction.User.Username, transaction.Product.Name);
+        }
+
+        public void DisplayUserBuysProduct(int count, BuyTransaction transaction)
+        {
+            Console.WriteLine("{0} bought {1}x {2}", transaction.User.Username, count, transaction.Product.Name);
+        }
+
+        public void Close()
+        {
+            Console.Clear();
+        }
+
+        public void DisplayInsufficientCash()
+        {
+            Console.WriteLine("Insufficient Cash");
+        }
+
+        public void DisplayGeneralError(string errorString)
+        {
+            Console.WriteLine(errorString);
+        }
+    }
+}
