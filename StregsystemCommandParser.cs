@@ -10,87 +10,115 @@ namespace OOP
     {
         Stregsystem Stregsystem;
         StregsystemCLI CLI;
+        Dictionary<string, Action<string[]>> Commands;
 
         public StregsystemCommandParser(StregsystemCLI cli, Stregsystem stregsystem)
         {
             this.Stregsystem = stregsystem;
             this.CLI = cli;
+
+            this.Commands = new Dictionary<string, Action<string[]>>
+            {
+                {":q", QuitAction},
+                {":quit", QuitAction},
+                {":activate", ActivateAction},
+                {":deactivate", DeactivateAction},
+                {":crediton", CreditOnAction},
+                {":creditoff", CreditOffAction},
+                {":addcredits", AddCreditsAction}
+            };
         }
 
-        public void ParseCommand(string command)
+        public void ParseCommand(string line)
         {
-            string[] data = command.Split(' ');
+            string[] commands = line.Split(' ');
 
-            if (command.StartsWith(":q") || command.StartsWith(":quit"))
+            if (!string.IsNullOrEmpty(line))
             {
-                System.Environment.Exit(1);
-            }
-            else if (command.StartsWith(":activate"))
-            {
-                this.Stregsystem.GetProduct(Convert.ToInt32(data[1])).Active = true;
-            }
-            else if (command.StartsWith(":deactivate"))
-            {
-                this.Stregsystem.GetProduct(Convert.ToInt32(data[1])).Active = false;
-            }
-            else if (command.StartsWith(":crediton"))
-            {
-                this.Stregsystem.GetProduct(Convert.ToInt32(data[1])).CanBeBoughtOnCredit = true;
-            }
-            else if (command.StartsWith(":creditoff"))
-            {
-                this.Stregsystem.GetProduct(Convert.ToInt32(data[1])).CanBeBoughtOnCredit = false;
-            }
-            else if (command.StartsWith(":addcredits"))
-            {
-                this.Stregsystem.AddCreditsToAccount(this.Stregsystem.GetUser(data[1]), Convert.ToSingle(data[2]));
-            }
-            else if (data.Count() == 1)
-            {
-                this.CLI.DisplayUserInfo(this.Stregsystem.GetUser(data[0]));
+                if (commands[0].StartsWith(":"))
+                {
+                    if (this.Commands.ContainsKey(commands[0]))
+                    {
+                        this.Commands[commands[0]](commands);
+                    }
+                    else
+                    {
+                        this.CLI.DisplayAdminCommandNotFoundMessage();
+                    }
+                }
+                else
+                {
+                    switch (commands.Count())
+                    {
+                        case 1:
+                            this.CLI.DisplayUserInfo(this.Stregsystem.GetUser(commands[0]));
 
-                //this.CLI.DisplayTransactionList(this.Stregsystem.GetUser(data[0]), 100); //TODO ret antal transactions parameter
-            }
-            else if (data.Count() == 2)
-            {
-                try
-                {
-                    this.Stregsystem.BuyProduct(this.Stregsystem.GetUser(data[0]), this.Stregsystem.GetProduct(Convert.ToInt32(data[1])));
-                }
-                catch (InsufficientCreditsException)
-                {
-                    this.CLI.DisplayInsufficientCash();
-                }
-                catch (UserNotFoundException)
-                {
-                    this.CLI.DisplayUserNotFound();
-                }
-                catch (ProductNotFoundException)
-                {
-                    this.CLI.DisplayProductNotFound();
-                }
-                catch (Exception e)
-                {
-                    this.CLI.DisplayGeneralError(e.Message);
-                }
-            }
-            else if (data.Count() == 3)
-            {
-                for (int i = 0; i < Convert.ToInt32(data[1]); i++)
-                {
-                    this.Stregsystem.BuyProduct(this.Stregsystem.GetUser(data[0]), this.Stregsystem.GetProduct(Convert.ToInt32(data[2])));
-                }
-            }
-            else if (data.Count() > 3)
-            {
-                this.CLI.DisplayTooManyArgumentsError();
-            }
-            else
-            {
-                this.CLI.DisplayGeneralError("den er er jo helt gal, du  følger ingen instruktioner what so ever! tag dig sammen");
-            }
+                            break;
 
-            this.CLI.ParseLine();
+                        case 2:
+                            if (commands[1].Equals("transaction"))
+                            {
+                                this.CLI.DisplayTransactionList(this.Stregsystem.GetUser(commands[0]), 10);
+                            }
+                            else
+                            {
+                                this.Stregsystem.BuyProduct(this.Stregsystem.GetUser(commands[0]), this.Stregsystem.GetProduct(Convert.ToInt32(commands[1])));
+                            }
+
+                            break;
+
+                        case 3:
+                            if (commands[1].Equals("transaction"))
+                            {
+                                this.CLI.DisplayTransactionList(this.Stregsystem.GetUser(commands[0]), Convert.ToInt32(commands[2]));
+                            }
+                            else
+                            {
+                                for (int i = 0; i < Convert.ToInt32(commands[1]); i++)
+                                {
+                                    this.Stregsystem.BuyProduct(this.Stregsystem.GetUser(commands[0]), this.Stregsystem.GetProduct(Convert.ToInt32(commands[2])));
+                                }
+                            }
+
+                            break;
+
+                        default:
+                            this.CLI.DisplayTooManyArgumentsError();
+                            break;
+                    }
+
+                }
+            }
+        }
+
+        void QuitAction(string[] commands)
+        {
+            System.Environment.Exit(1);
+        }
+
+        void ActivateAction(string[] commands)
+        {
+            this.Stregsystem.GetProduct(Convert.ToInt32(commands[1])).Active = true;
+        }
+
+        void DeactivateAction(string[] commands)
+        {
+            this.Stregsystem.GetProduct(Convert.ToInt32(commands[1])).Active = false;
+        }
+
+        void CreditOnAction(string[] commands)
+        {
+            this.Stregsystem.GetProduct(Convert.ToInt32(commands[1])).CanBeBoughtOnCredit = true;
+        }
+
+        void CreditOffAction(string[] commands)
+        {
+            this.Stregsystem.GetProduct(Convert.ToInt32(commands[1])).CanBeBoughtOnCredit = false;
+        }
+
+        void AddCreditsAction(string[] commands)
+        {
+            this.Stregsystem.AddCreditsToAccount(this.Stregsystem.GetUser(commands[1]), Convert.ToSingle(commands[2]));
         }
     }
 }

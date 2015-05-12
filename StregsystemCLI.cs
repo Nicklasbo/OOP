@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace OOP
 {
@@ -14,7 +15,16 @@ namespace OOP
 
         public void ParseLine()
         {
-            this.Parser.ParseCommand(Console.ReadLine());
+            try
+            {
+                this.Parser.ParseCommand(Console.ReadLine());
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            ParseLine();
         }
 
         public void Start(StregsystemCommandParser parser)
@@ -31,10 +41,24 @@ namespace OOP
 
         public void DisplayTransactionList(User user, int amount)
         {
-            foreach (Transaction transaction in this.Stregsystem.GetTransactionList(user, amount))
+            Console.WriteLine("\r\nTRANSACTIONS");
+            Console.WriteLine("----------------------------------------------------------------");
+
+            List<Transaction> list = this.Stregsystem.GetTransactionList(user, amount);
+
+            if (list.Count > 0)
             {
-                Console.WriteLine(transaction);
+                foreach (Transaction transaction in list)
+                {
+                    Console.WriteLine(transaction);
+                }
             }
+            else
+            {
+                Console.WriteLine("No transactions was found");
+            }
+
+            Console.WriteLine("----------------------------------------------------------------");
         }
 
         public void DisplayUserNotFound()
