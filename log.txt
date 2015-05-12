@@ -1,0 +1,5 @@
+13-05-2015 00:00:05	Deposit 	1	rnarsk14	100
+13-05-2015 00:00:40	Purchase	2	rnarsk14	Monster	12
+13-05-2015 00:00:40	Purchase	3	rnarsk14	Monster	12
+13-05-2015 00:00:40	Purchase	4	rnarsk14	Monster	12
+13-05-2015 00:02:10	Deposit 	1	rnarsk14	50

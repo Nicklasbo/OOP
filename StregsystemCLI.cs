@@ -21,7 +21,7 @@ namespace OOP
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.Message);
+                DisplayGeneralError(e.Message);
             }
 
             ParseLine();
@@ -108,7 +108,12 @@ namespace OOP
 
         public void DisplayGeneralError(string errorString)
         {
+            Console.WriteLine("\r\nERROR");
+            Console.WriteLine("----------------------------------------------------------------");
+
             Console.WriteLine(errorString);
+
+            Console.WriteLine("----------------------------------------------------------------");
         }
     }
 }

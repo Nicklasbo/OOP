@@ -62,7 +62,7 @@ namespace OOP
                             }
                             else
                             {
-                                this.Stregsystem.BuyProduct(this.Stregsystem.GetUser(commands[0]), this.Stregsystem.GetProduct(Convert.ToInt32(commands[1])));
+                                this.CLI.DisplayUserBuysProduct(this.Stregsystem.BuyProduct(this.Stregsystem.GetUser(commands[0]), this.Stregsystem.GetProduct(Convert.ToInt32(commands[1]))));
                             }
 
                             break;

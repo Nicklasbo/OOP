@@ -26,6 +26,7 @@ namespace OOP
         public override void Execute()
         {
             this.User.Balance += Amount;
+            LogTransaction();
         }
     }
 }

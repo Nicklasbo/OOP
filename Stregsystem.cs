@@ -62,7 +62,7 @@ namespace OOP
                     return user;
             }
 
-            throw new UserNotFoundException();
+            throw new UserNotFoundException("User: " + username + " was not found");
         }
 
         public List<Transaction> GetTransactionList(User user, int amount)

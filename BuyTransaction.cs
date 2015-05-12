@@ -27,6 +27,8 @@ namespace OOP
             }
 
             this.User.Balance -= this.Product.Price;
+
+            LogTransaction();
         }
     }
 }
